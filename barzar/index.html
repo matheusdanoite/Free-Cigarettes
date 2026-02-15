@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#f4e4bc">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta property="og:title" content="Barzar">
+    <meta property="og:description" content="Tudo passa, até uva passa.">
+    <link rel="icon" type="image/png" href="assets/favicon.png">
+    <title>Barzar</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="container">
+        <input type="file" id="secret-file-input" accept="image/*" style="display:none;"
+            onchange="handleSecretFileSelect(event)">
+
+        <div id="media-wrapper">
+            <div id="camera-container">
+                <video id="video" autoplay playsinline></video>
+                <canvas id="canvas" style="display:none;"></canvas>
+                <img id="photo-preview" alt="Preview">
+            </div>
+
+            <img src="assets/frame.png" id="media-frame" alt="Frame Overlay">
+
+            <div id="onboarding-overlay">
+                <div class="onboarding-content">
+                    <button id="start-btn" class="btn-primary">Cigarro grátis</button>
+                    <button id="reject-btn" class="btn-secondary">Sou contra</button>
+                </div>
+            </div>
+
+            <div id="text-input-container">
+                <div id="text-prompt">Diga algo antitabagista — ou não.</div>
+                <textarea id="message-area" maxlength="250"></textarea>
+                <div class="char-counter"><span id="char-count">0</span>/250</div>
+            </div>
+
+            <div id="status-card">
+                <div id="loader" class="loader"></div>
+                <div id="status-message" class="status-text">Mandando...</div>
+            </div>
+
+            <div id="alert-card">
+                <div id="alert-message"></div>
+            </div>
+
+            <!-- UI Overlays -->
+            <div id="initial-controls" style="display: none;">
+                <div class="slot-left">
+                    <!-- Ghost element to ensure perfect symmetry for the center button -->
+                    <div class="btn-circle" style="visibility: hidden; pointer-events: none;"></div>
+                </div>
+                <div class="slot-center">
+                    <button id="capture-btn" title="Capturar"></button>
+                    <button id="send-text-btn" class="hidden-btn" onclick="uploadTextMessage()">Enviar</button>
+                </div>
+                <div class="slot-right">
+                    <div class="btn-circle" id="camera-toggle-container" onclick="toggleCamera()" title="Trocar Câmera">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M23 4v6h-6"></path>
+                            <path d="M1 20v-6h6"></path>
+                            <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <div id="action-controls" class="controls" style="display:none;">
+                <button class="btn-secondary" onclick="resetCamera()">De novo</button>
+                <button class="btn-primary" onclick="uploadPhoto()">Manda bala</button>
+            </div>
+        </div>
+
+        <div class="footer" onclick="handleSecretClick()">
+            Nenhum conteúdo gerado aqui é armazenado. Tudo passa, até uva passa.
+        </div>
+    </div>
+
+    <script type="module" src="app.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,8 @@
+flask
+flask-cors
+requests
+bleak
+Pillow
+pyobjc-framework-Vision
+pyobjc-framework-Quartz
+python-dotenv
