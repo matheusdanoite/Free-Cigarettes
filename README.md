@@ -1,29 +1,32 @@
-# Barzar Web: Cigarros Grátis
-Barzar foi um encontro de arte, brechó e bebedeira. Também foi o vernissage do meu domínio. Para botar esse endereço web que acabei de adquirir para uso, decidi continuar um [projeto de engenharia reversa de uma impressora térmica Phomemo T02](https://github.com/matheusdanoite/Phomemo-T02-Driver-for-macOS). A ideia era permitir interações entre o digital e o físico, não sobrecarregar o usuário com conteúdo inútil, respeitar sua privacidade e também beber umas cervejas. O sistema permite que usuários enviem fotos e mensagens de uma interface web para serem processadas com filtros inteligentes via Apple Vision e impressas automaticamente na Phomemto T02 via Bluetooth.
+# Barzar Web: Free Cigarettes
 
-## Como Funciona
-Ao entrar no saity do Barzar, o usuário é recebido com duas escolhas: "Cigarros grátis", ou "Sou contra". 
+[Português Brasileiro](README.pt-br.md)
 
-A primeira escolha leva a uma visualização da câmera, que, uma vez capturada uma foto, é encaminhada via túnel da Cloudflare para o meu Mac, que faz o processamento via Apple Vision para detecção de faces, a inversão do arquivo de imagem de cigarro aplicado para otimizar o contraste com o fundo, envio dessas informações para a impressora e subsequente destruição de todos os arquivos processados.
+Barzar was an art, thrift shop, and drinking gathering. It was also the vernissage of my domain. To put this web address I just acquired to use, I decided to continue a [reverse engineering project of a Phomemo T02 thermal printer](https://github.com/matheusdanoite/Phomemo-T02-Driver-for-macOS). The idea was to allow interactions between the digital and the physical, not overload the user with useless content, respect their privacy, and also drink some beers. The system allows users to send photos and messages from a web interface to be processed with smart filters via Apple Vision and automatically printed on the Phomemo T02 via Bluetooth.
 
-Já na segunda escolha, o usuário tem a possibilidade de escrever um texto defendendo seu ponto de vista antitabagista, ou escrever o que lhe der na telha, dentro dos limites de 280 caracteres. O texto não passa pelo Vision Framework, mas tem um pipeline próprio que adapta o tamanho da fonte de acordo com o tamanho do conteúdo para melhor caber em uma dada área dentro de um arquivo de imagem para servir de moldura.
+## How It Works
+Upon entering the Barzar website, the user is greeted with two choices: "Free Cigarettes", or "I'm within't".
 
-Ambos os modos possuem feedback de status em tempo real, informando o usuário de que passo está sendo realiado e com "Me perdi aqui" como mensagem de erro.
+The first choice leads to a camera view, which, once a photo is captured, is forwarded via a Cloudflare tunnel to my Mac. There, it undergoes processing via Apple Vision for face detection, inversion of the applied cigarette image overlay to optimize contrast with the background, sending on of this data to the printer, and subsequent destruction of all processed files.
 
-## Funcionalidades Principais
-- **Captura Web**: Interface responsiva, otimizada para dispositivos mobile, capturando fotos e mensagens de texto.
-- **Apple Vision Overlays**: Detecção de landmarks faciais para aplicação automática de cigarros e molduras.
-- **Contraste Inteligente**: Inversão automática das cores dos overlays baseada no brilho da imagem de fundo para garantir visibilidade, visto que a Phomemo T02 imprime em escala de cinza com uma resolução baixíssima.
-- **Dimensionamento de Texto**: Dimensionamento automático de texto para otimizar a ocupação de área possível de ser impressa.
-- **Thermal Printing**: Driver customizado para Phomemo T02 [(disponível aqui no meu GitHub!)](https://github.com/matheusdanoite/Phomemo-T02-Driver-for-macOS) com suporte a imagens e textos.
-- **Modo Telepatia**: Sincronização em tempo real do status da impressão (Mandando -> Telepatia feita -> Olhe a impressora -> Pronto).
+In the second choice, the user has the possibility to write a text defending their anti-smoking viewpoint, or write whatever they feel like, within the limits of 280 characters. The text does not go through the Vision Framework but has its own pipeline that adapts the font size according to the content length to better fit within a given area inside an image file acting as a frame.
 
-## Arquitetura do Sistema
-O projeto utiliza uma estrutura distribuída para contornar limitações de hardware e conectividade:
+Both modes have real-time status feedback, informing the user which step is currently being performed and using "I got lost here" as an error message.
+
+## Key Features
+- **Web Capture**: Responsive interface, optimized for mobile devices, capturing photos and text messages.
+- **Apple Vision Overlays**: Facial landmark detection for automatic application of cigarettes and frames.
+- **Smart Contrast**: Automatic inversion of overlay colors based on the brightness of the background image to ensure visibility, given that the Phomemo T02 prints in grayscale with very low resolution.
+- **Text Sizing**: Automatic text sizing to optimize the occupation of the printable area.
+- **Thermal Printing**: Custom driver for Phomemo T02 [(available here on my GitHub!)](https://github.com/matheusdanoite/Phomemo-T02-Driver-for-macOS) with support for images and text.
+- **Telepathy Mode**: Real-time synchronization of print status (Sending -> Telepathy done -> Look at the printer -> Ready).
+
+## System Architecture
+The project uses a distributed structure to circumvent hardware and connectivity limitations:
 ```mermaid
 graph TD
-    A[📱 Interface Web] -- "Upload (POST)" --> B[☁️ API Server / Flask]
-    B -- "Polling / Files" --> C[🌉 Bridge Local / Python]
+    A[📱 Web Interface] -- "Upload (POST)" --> B[☁️ API Server / Flask]
+    B -- "Polling / Files" --> C[🌉 Local Bridge / Python]
     C -- "Apple Vision / sips" --> D[🖼️ Processed Images]
     D -- "Local Queue" --> E[🖨️ Printer Monitor / BLE]
     E -- "ESC/POS Commands" --> F[📠 Phomemo T02]
@@ -35,72 +38,72 @@ graph TD
     end
 ```
 
-## Stack Tecnológico
-| Camada | Tecnologias |
+## Tech Stack
+| Layer | Technologies |
 | :--- | :--- |
 | **Frontend** | HTML5, CSS3 (Vanilla), JavaScript, [Vite](https://vitejs.dev/) |
 | **Backend** | Python, Flask, Flask-CORS |
 | **Processing** | Apple Vision Framework, `pyobjc`, Pillow, `sips` |
 | **Hardware/Comm** | Bluetooth LE, [Bleak](https://github.com/hbldh/bleak), Cloudflare Tunnels |
 
-## Como Instalar e Rodar
-### Pré-requisitos
-- **macOS** (Obrigatório para Vision Framework e `sips`).
+## How to Install and Run
+### Prerequisites
+- **macOS** (Required for Vision Framework and `sips`).
 - **Python 3.10+**
-- **Node.js 18+** (para o Frontend)
-- **Bluetooth** habilitado.
+- **Node.js 18+** (for the Frontend)
+- **Bluetooth** enabled.
 
-### Configuração
-1. **Clone o repositório**:
+### Configuration
+1. **Clone the repository**:
    ```bash
    git clone https://github.com/matheusdanoite/barzar-web.git
    cd barzar-web
    ```
 
-2. **Ambiente Python**:
+2. **Python Environment**:
    ```bash
    python3 -m venv venv
    source venv/bin/activate
    pip install -r requirements.txt
    ```
    
-   Ou instale manualmente: 
+   Or install manually: 
    ```bash
    pip install flask flask-cors requests bleak Pillow pyobjc-framework-Vision pyobjc-framework-Quartz python-dotenv
    ```
 
-3. **Ambiente Frontend**:
+3. **Frontend Environment**:
    ```bash
    npm install
    ```
 
-4. **Configuração de API**:
-    É necessário apontar o frontend para a URL correta da API.
-    - Abra o arquivo [app.js](https://github.com/matheusdanoite/Cigarros-Gratis/blob/main/barzar/app.js).
-    - Localize a linha 54 e substitua a URL em `const API_BASE_URL` pela sua URL do túnel ou IP local.
+4. **API Configuration**:
+    It is necessary to point the frontend to the correct API URL.
+    - Open the file [app.js](https://github.com/matheusdanoite/Cigarros-Gratis/blob/main/barzar/app.js).
+    - Locate line 54 and replace the URL in `const API_BASE_URL` with your tunnel URL or local IP.
 
-### Execução
-Para facilitar, você pode usar o script de automação:
+### Execution
+To make it easier, you can use the automation script:
 ```bash
 chmod +x start_barzar.sh
 ./start_barzar.sh
 ```
-*Este script abrirá 4 terminais: Server, Tunnel, Printer Monitor e Bridge.*
+*This script will open 4 terminals: Server, Tunnel, Printer Monitor, and Bridge.*
 
-Para rodar o **Frontend** em modo desenvolvimento:
+To run the **Frontend** in development mode:
 ```bash
 npm run dev
 ```
 
-## Dicas de Hardware (Phomemo T02)
-- Certifique-se que a impressora está ligada e com carga.
-- O sistema busca automaticamente o dispositivo via BLE. Se houver falha na conexão, verifique se nenhum outro app (como o oficial da Phomemo) está utilizando o Bluetooth.
+## Hardware Tips (Phomemo T02)
+- Ensure the printer is turned on and charged.
+- The system automatically searches for the device via BLE. If the connection fails, check if no other app (like the official Phomemo app) is using Bluetooth.
 
-## Créditos e Contribuições
-- **Design & Arte**: Ana e Natan
-- **Desenvolvimento**: [matheusdanoite](https://github.com/matheusdanoite).
+## Credits and Contributions
+- **Design & Art**: Ana and Natan
+- **Development**: [matheusdanoite](https://github.com/matheusdanoite).
 
 > [!NOTE]
-> Este projeto foi desenvolvido por puros fins artísticos e experimentais.
+> This project was developed for purely artistic and experimental purposes.
 
-**Corporação matheusdanoite © 2026**
+**matheusdanoite Corp © 2026**
